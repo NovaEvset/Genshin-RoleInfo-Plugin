@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nonebot-plugin-genshin-role-info"
+version = "4.3.13"
+description = "NoneBot2 原神角色面板插件：橱窗面板、圣遗物评分与推荐、群排行"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0-or-later" }
+authors = [
+    { name = "CRAZYSHIMAKAZE" },
+]
+maintainers = [
+    { name = "SiLENT", email = "novaevset@gmail.com" },
+]
+keywords = [
+    "nonebot",
+    "nonebot2",
+    "onebot",
+    "napcat",
+    "genshin",
+    "原神",
+    "plugin",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: NoneBot2",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+]
+
+# 运行依赖：与原真寻插件一致（httpx / Pillow / numpy），
+# 去掉真寻运行时（zhenxun）与真寻插件调度器。
+dependencies = [
+    "nonebot2>=2.3.0",
+    "nonebot-adapter-onebot>=2.4.0",
+    "httpx>=0.27",
+    "Pillow>=10.0",
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+# 可选的每日更新检查（缺少时插件仍可正常工作）
+scheduler = ["nonebot-plugin-apscheduler>=0.5.0"]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "respx>=0.21",
+]
+
+[project.urls]
+Homepage = "https://github.com/NovaEvset/Genshin-RoleInfo-Plugin"
+Repository = "https://github.com/NovaEvset/Genshin-RoleInfo-Plugin"
+Issues = "https://github.com/NovaEvset/Genshin-RoleInfo-Plugin/issues"
+"原真寻插件" = "https://github.com/NovaEvset/zhenxun_plugin_genshin_role_info"
+
+[tool.setuptools]
+packages = [
+    "nonebot_plugin_genshin_role_info",
+    "nonebot_plugin_genshin_role_info.utils",
+    "nonebot_plugin_genshin_role_info.data_source",
+    "nonebot_plugin_genshin_role_info.data_source.damage",
+    "nonebot_plugin_genshin_role_info.data_source.damage.rules",
+]
+
+# 内置资源（字体、背景、JSON 数据表）必须随包分发
+[tool.setuptools.package-data]
+nonebot_plugin_genshin_role_info = ["res/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

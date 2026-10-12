@@ -1,0 +1,730 @@
+{
+  "driver": "tests/integration/ob11_driver.py",
+  "ws_url": "ws://127.0.0.1:18080/onebot/v11/ws",
+  "bot_qq": 300000001,
+  "user_qq": 10001,
+  "group_id": 987654321,
+  "uid": "346948884",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "cases": [
+    {
+      "case": "绑定 UID",
+      "command": "原神绑定346948884",
+      "expected": "回复绑定成功",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "已成功添加原神uid：346948884"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "已成功添加原神uid：346948884"
+      },
+      "passed": true
+    },
+    {
+      "case": "重复绑定",
+      "command": "原神绑定346948884",
+      "expected": "提示已绑定过",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "您已绑定过uid：346948884，如果希望更换uid，请先发送原神解绑"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "您已绑定过uid：346948884，如果希望更换uid，请先发送原神解绑"
+      },
+      "passed": true
+    },
+    {
+      "case": "解绑 UID",
+      "command": "原神解绑",
+      "expected": "回复删除成功",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "用户数据删除成功..."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "用户数据删除成功..."
+      },
+      "passed": true
+    },
+    {
+      "case": "非法 UID（非 9 位）",
+      "command": "原神绑定999",
+      "expected": "提示 uid 不合法",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "绑定的uid999不合法，请重新绑定!"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "绑定的uid999不合法，请重新绑定!"
+      },
+      "passed": true
+    },
+    {
+      "case": "非法 UID（首位为 0）",
+      "command": "原神绑定012345678",
+      "expected": "提示 uid 不合法",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "绑定的uid12345678不合法，请重新绑定!"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "绑定的uid12345678不合法，请重新绑定!"
+      },
+      "passed": true
+    },
+    {
+      "case": "重新绑定 UID",
+      "command": "原神绑定346948884",
+      "expected": "回复绑定成功",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "已成功添加原神uid：346948884"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "已成功添加原神uid：346948884"
+      },
+      "passed": true
+    },
+    {
+      "case": "原神角色排行",
+      "command": "原神角色排行",
+      "expected": "更新图或缓存提示",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 1166265
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          1166265
+        ],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "更新原神面板",
+      "command": "更新原神面板346948884",
+      "expected": "回复更新完成并附更新图",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 1167879
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          1167879
+        ],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "角色面板",
+      "command": "阿罗夏面板",
+      "expected": "返回面板图片",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "恭喜成为本群最强阿罗夏!\n"
+                },
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 1552791
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          1552791
+        ],
+        "text": "恭喜成为本群最强阿罗夏!\n"
+      },
+      "passed": true
+    },
+    {
+      "case": "圣遗物榜单",
+      "command": "圣遗物榜单",
+      "expected": "返回榜单图片与统计",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 2052729
+                },
+                {
+                  "kind": "text",
+                  "text": "\n大毕业圣遗物0个,小毕业圣遗物3个.\n最高评分为哥伦比娅52.08分的天授之馨!"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          2052729
+        ],
+        "text": "\n大毕业圣遗物0个,小毕业圣遗物3个.\n最高评分为哥伦比娅52.08分的天授之馨!"
+      },
+      "passed": true
+    },
+    {
+      "case": "评分排行",
+      "command": "阿罗夏评分排行",
+      "expected": "返回排行图片",
+      "actions": [
+        {
+          "action": "get_group_member_list",
+          "params": {
+            "group_id": 987654321
+          }
+        },
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 334638
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 2,
+        "actions": [
+          "get_group_member_list",
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          334638
+        ],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "圣遗物推荐",
+      "command": "阿罗夏昔日套推荐",
+      "expected": "先提示匹配中，再返回推荐图",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "at",
+                  "qq": "10001"
+                },
+                {
+                  "kind": "text",
+                  "text": " "
+                },
+                {
+                  "kind": "text",
+                  "text": "正在从圣遗物缓存中匹配评分最高的昔日宗室之仪套装搭配，请稍后..."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 1580265
+                },
+                {
+                  "kind": "text",
+                  "text": ""
+                },
+                {
+                  "kind": "text",
+                  "text": "注:仅根据当前缓存圣遗物进行推荐,发送'圣遗物导入'可导入背包内所有圣遗物."
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 2,
+        "actions": [
+          "send_msg",
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          1580265
+        ],
+        "text": " \n正在从圣遗物缓存中匹配评分最高的昔日宗室之仪套装搭配，请稍后...\n\n注:仅根据当前缓存圣遗物进行推荐,发送'圣遗物导入'可导入背包内所有圣遗物."
+      },
+      "passed": true
+    },
+    {
+      "case": "推荐序号越界",
+      "command": "阿罗夏昔日套推荐99",
+      "expected": "返回序号越界提示",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "at",
+                  "qq": "10001"
+                },
+                {
+                  "kind": "text",
+                  "text": " "
+                },
+                {
+                  "kind": "text",
+                  "text": "正在从圣遗物缓存中匹配伤害最高的昔日宗室之仪套装搭配，请稍后..."
+                }
+              ]
+            }
+          }
+        },
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "at",
+                  "qq": "10001"
+                },
+                {
+                  "kind": "text",
+                  "text": " "
+                },
+                {
+                  "kind": "text",
+                  "text": "伤害序号应在 1-4 之间，当前输入为 99"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 2,
+        "actions": [
+          "send_msg",
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": " \n正在从圣遗物缓存中匹配伤害最高的昔日宗室之仪套装搭配，请稍后...\n \n伤害序号应在 1-4 之间，当前输入为 99"
+      },
+      "passed": true
+    },
+    {
+      "case": "未识别角色",
+      "command": "不存在的角色面板",
+      "expected": "不应有任何回复",
+      "actions": [],
+      "observed": {
+        "action_count": 0,
+        "actions": [],
+        "images": 0,
+        "image_bytes": [],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "圣遗物导入提示",
+      "command": "圣遗物导入",
+      "expected": "返回操作步骤",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "请在PC端按以下步骤操作\n1.下载https://github.com/1803233552/yas/releases/download/v0.1.28/yas_artifact_v0.1.28.exe\n2.打开原神，切换到背包圣遗物页面，将背包拉到最上面\n3.在该目录下命令行窗口输入./yas_artifact_v0.1.28.exe -f good --min-level 20命令,开始扫描\n4.扫描完成后，添加机器人为好友，将生成的good.json文件私聊发送给机器人即可。"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "请在PC端按以下步骤操作\n1.下载https://github.com/1803233552/yas/releases/download/v0.1.28/yas_artifact_v0.1.28.exe\n2.打开原神，切换到背包圣遗物页面，将背包拉到最上面\n3.在该目录下命令行窗口输入./yas_artifact_v0.1.28.exe -f good --min-level 20命令,开始扫描\n4.扫描完成后，添加机器人为好友，将生成的good.json文件私聊发送给机器人即可。"
+      },
+      "passed": true
+    },
+    {
+      "case": "私聊事件",
+      "command": "阿罗夏面板（私聊）",
+      "expected": "私聊同样能处理",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "message_type": "private",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": ""
+                },
+                {
+                  "kind": "image",
+                  "encoded": "base64",
+                  "bytes": 1552791
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 1,
+        "image_bytes": [
+          1552791
+        ],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "检查更新",
+      "command": "检查原神面板更新",
+      "expected": "无更新时不回复或给出结果",
+      "actions": [],
+      "observed": {
+        "action_count": 0,
+        "actions": [],
+        "images": 0,
+        "image_bytes": [],
+        "text": ""
+      },
+      "passed": true
+    },
+    {
+      "case": "重置最强",
+      "command": "重置最强阿罗夏",
+      "expected": "回复重置成功",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "text",
+                  "text": "重置群阿罗夏成功!"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "重置群阿罗夏成功!"
+      },
+      "passed": true
+    },
+    {
+      "case": "米游社同步（未配置）",
+      "command": "米游社更新原神面板",
+      "expected": "返回配置指引而非静默失败",
+      "actions": [
+        {
+          "action": "send_msg",
+          "params": {
+            "user_id": 10001,
+            "group_id": 987654321,
+            "message_type": "group",
+            "message": {
+              "kind": "chain",
+              "segments": [
+                {
+                  "kind": "reply",
+                  "id": "119"
+                },
+                {
+                  "kind": "text",
+                  "text": "米游社面板同步需要额外的登录态提供方。\n请设置环境变量 GENSHIN_ROLE_INFO_MYS_PROVIDER=module:attr 指向一个已登录的米游社服务对象（需提供 load_user 与 MysAPI），配置后本命令即可使用。"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "observed": {
+        "action_count": 1,
+        "actions": [
+          "send_msg"
+        ],
+        "images": 0,
+        "image_bytes": [],
+        "text": "米游社面板同步需要额外的登录态提供方。\n请设置环境变量 GENSHIN_ROLE_INFO_MYS_PROVIDER=module:attr 指向一个已登录的米游社服务对象（需提供 load_user 与 MysAPI），配置后本命令即可使用。"
+      },
+      "passed": true
+    }
+  ]
+}
