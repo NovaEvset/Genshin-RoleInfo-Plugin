@@ -70,10 +70,10 @@ cd /home/novaevset/Genshin_RoleInfo_Plugins
 ### 结果
 
 ```
-211 passed, 2 deselected in 87.33s (0:01:27)
+215 passed, 2 deselected in 88.21s (0:01:28)
 ```
 
-- **通过：211**
+- **通过：215**
 - **失败：0**
 - **跳过：0**（另有 2 项在线集成测试被 `-m "not integration"` **默认排除**，非跳过）
 - 总耗时：约 87 秒
@@ -82,7 +82,7 @@ cd /home/novaevset/Genshin_RoleInfo_Plugins
 
 | 测试文件 | 用例数 | 覆盖内容 |
 |---|---:|---|
-| `test_plugin.py` | 17 | 插件加载、`PluginMetadata`、17 个匹配器注册、命令名与别名、优先级、`block` 标志、群聊权限、正则匹配与捕获组 |
+| `test_plugin.py` | 21 | 插件加载、`PluginMetadata`、17 个匹配器注册、命令名与别名、优先级、`block` 标志、群聊权限、正则匹配与捕获组 |
 | `test_utils.py` | 23 | JSON 读写（缺失文件/中文/父目录创建）、@ 解析、路径中心化（含 `res/` 层级回归）、必需数据文件与字体存在性、数据目录环境变量与回退、图标 URL 解析、HTTP 客户端（成功/5xx 重试/4xx 不重试/多候选回退/下载落盘）、文件校验器 |
 | `test_damage_engine.py` | 35 | 规则表装载、旅行者按元素取规则、**与源实现逐项 parity（参考面板 / 真实缓存 9 角色 / 全 129 规则）**、输出契约、文本行标记、暴击与天赋单调性、命座影响、反应与等级表、计算器单元行为（抗性三段式、暴击列、治疗、护盾、剧变无暴击列、物理分支、天赋加成） |
 | `test_artifact_score.py` | 54 | 9 档评级分界、强化次数标记、强化次数推算（显式/越界/等级 0/歧义填充）、有效词条解析（甘雨/未知角色兜底/数据损坏兜底/荧按元素重映射/子串匹配）、套装识别、`get_miao_score` 返回结构与就地修改、单件评分端到端、评分与等级无关、元素不符惩罚、充能主词条豁免、空权重异常、数据文件一致性（`score.json` 键完整性、无全 0 权重、`artifact.json` 四段结构） |
@@ -284,6 +284,7 @@ curl -H "User-Agent: Miao-Plugin/3.0" https://profile.microgg.cn/api/uid/3469488
 | 3 | `_is_retryable` 未覆盖 5xx，导致重试策略失效 | `utils/http_utils.py` | **迁移引入** | 单元测试断言失败（期望 3 次实际 1 次） | `test_utils.py::test_get_content_raises_on_500` |
 | 4 | 配置默认值使用命名占位符 `{uid}`，但代码调用 `url_template.format(uid)`，导致 `KeyError: 'uid'`，**面板更新完全不可用** | `config.py` + `__init__.py` | **迁移引入** | **协议级集成测试**（服务端 `KeyError` 日志） | `test_plugin.py`；集成用例「更新原神面板」 |
 | 5 | 排行命令对每个群成员同步调用伤害引擎，阻塞事件循环 | 源 `__init__.py:713,750` | **源项目既有** | 子代理源码分析 | 已改为 `asyncio.to_thread` |
+| 6 | 更新检查的默认地址指向 `__init__.py`，但 `PLUGIN_VERSION` 字面量实际定义在 `config.py`，导致远端版本号**永远解析失败**（`远端版本号格式无效`） | `config.py` + `__init__.py` | **迁移引入** | **推送后的在线验证**（`_get_update_message()` 实测） | `test_plugin.py::test_version_check_url_points_to_file_with_version_literal` 等 4 项 |
 
 另外修复了源项目中失败信息仅 `print()` 到 stdout 的问题（改为标准库
 `logging`，伤害包保持仅依赖 stdlib）。
@@ -300,7 +301,7 @@ curl -H "User-Agent: Miao-Plugin/3.0" https://profile.microgg.cn/api/uid/3469488
 | **`good.json` 真实文件导入** | 需要真实私聊文件（`get_private_file_url`）。集成测试中该 API 返回不可达地址，用于验证错误处理分支；转换逻辑由代码审查覆盖 |
 | **在线集成测试（2 项）** | 默认排除（`-m "not integration"`），需要真实网络。执行方式：`pytest -m integration` |
 | **`nonebot-plugin-apscheduler` 调度** | 该依赖未安装；仅验证了缺失时的告警与跳过逻辑 |
-| **每日更新检查的「有更新」分支** | 本地版本与远端一致时不会触发；且远端 `main` 分支尚未包含本插件代码（尚未推送），当前返回 404 并记录告警 |
+| **每日更新检查的「有更新」分支** | 推送后已实测：`_get_update_message()` 能正确抓取远端 `config.py` 的版本号并与本地 `4.3.13` 比较，判定「无更新」返回 `None`（无告警）。构造「确实有新版本」的场景需改动远端文件，本次未执行 |
 
 ---
 
@@ -366,12 +367,37 @@ curl -H "User-Agent: Miao-Plugin/3.0" https://profile.microgg.cn/api/uid/3469488
 | 插件可在 NoneBot2 加载 | ✅ 实测加载成功，17 个匹配器注册 |
 | 命令列表与代码一致 | ✅ README 命令表由实际注册的匹配器核对生成 |
 | 安装/配置/使用文档 | ✅ README（含 NapCat 连接、故障排查） |
-| 自动化测试实际执行 | ✅ **211 passed, 0 failed** |
+| 自动化测试实际执行 | ✅ **215 passed, 0 failed** |
 | Matcha 集成测试 | ⚠️ **未能运行**（无 Rust 工具链 + GUI 交互），已用协议级等价驱动完成端到端验证 |
-| 敏感信息与许可证检查 | ✅ 源与目标均为 AGPL-3.0；`.env`/密钥已由 `.gitignore` 排除 |
-| Git 差异与提交内容检查 | ✅ 见最终回复中的提交说明 |
-| SSH 推送与远程核验 | 见最终回复 |
+| 敏感信息与许可证检查 | ✅ 源与目标均为 AGPL-3.0；`.env`/密钥已由 `.gitignore` 排除；`.env.example` 仅含占位符 |
+| Git 差异与提交内容检查 | ✅ 125 个文件已审计；未包含 `_upstream/`、`.venv/`、`tests/_data/`、`tests/_integration_data/` |
+| SSH 推送与远程核验 | ✅ 已推送；`origin/main` 与本地一致（详见下节） |
+
+### 推送详情
+
+| 项目 | 值 |
+|---|---|
+| 目标仓库 | <https://github.com/NovaEvset/Genshin-RoleInfo-Plugin> |
+| 目标分支 | `main` |
+| 本地提交 | `4a6a236221a2ad43e617a3c35c796edd573d9197` |
+| 远程提交 | `4a6a236221a2ad43e617a3c35c796edd573d9197`（与本地一致） |
+| 推送方式 | SSH（`git@github.com:NovaEvset/Genshin-RoleInfo-Plugin.git`） |
+| 是否强制推送 | 否（快进推送 `f1cc394..4a6a236`） |
+| 远程分支核验 | `git ls-remote --heads origin` → `refs/heads/main` = `4a6a236…` |
+| 远程文件可访问性 | `README.md` / `docs/TEST_REPORT.md` / `docs/FEATURE_MAPPING.md` / `LICENSE` / `nonebot_plugin_genshin_role_info/__init__.py` 均返回 HTTP 200 |
+
+推送过程中遇到并解决的两个问题（均如实记录）：
+
+1. **远端 URL 为 HTTPS 且无凭据** → 改为 SSH 远端（未修改任何 SSH 配置或访问权限）。
+2. **GitHub 邮箱隐私保护（`GH007`）拒绝推送** —— 作者邮箱为 `novaevset@gmail.com`，
+   而账号开启了 "Keep my email addresses private"。解决方式：**仅在本仓库**设置
+   `user.email = novaevset@users.noreply.github.com` 并修正提交作者；
+   全局 `user.email` 仍保持为 `novaevset@gmail.com`，未做改动。
+
+**推送完成后，插件自带的更新检查地址已可正常访问**（推送前该 URL 返回 404，
+属预期——远端尚无该文件）。
 
 **总体结论**：迁移在功能正确性、源码可追溯性与测试真实性方面达到目标。
 唯一未按原计划执行的是 **Matcha GUI 测试**（环境不可行，已如实记录并给出
-等价替代方案与可复现步骤）。
+等价替代方案与可复现步骤）。代码与文档已通过 SSH 推送至指定 GitHub 仓库，
+并已核验远程提交与文件可访问性。

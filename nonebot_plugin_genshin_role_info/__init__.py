@@ -1279,11 +1279,11 @@ async def get_update_info() -> str:
 async def _get_update_message() -> str | None:
     try:
         body = await AsyncHttpx.get_content(config.genshin_role_info_version_url)
-        match = re.search(
-            r'version="(\d+\.\d+\.\d+)"', body.decode("utf-8", "ignore")
-        ) or re.search(
-            r'PLUGIN_VERSION\s*=\s*"(\d+\.\d+\.\d+)"',
-            body.decode("utf-8", "ignore"),
+        text = body.decode("utf-8", "ignore")
+        # 兼容两种写法：PluginMetadata 的 version="x.y.z" 与
+        # config.py 中的 PLUGIN_VERSION = "x.y.z"
+        match = re.search(r'version="(\d+\.\d+\.\d+)"', text) or re.search(
+            r'PLUGIN_VERSION\s*=\s*"(\d+\.\d+\.\d+)"', text
         )
     except Exception as error:
         nonebot.logger.warning(f"{PLUGIN_NAME}插件检查更新失败: {error}")

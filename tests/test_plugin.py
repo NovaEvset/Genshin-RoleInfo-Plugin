@@ -199,3 +199,60 @@ def test_command_pattern_matching(regex, text, expected):
     match = re.search(regex, text)
     assert match is not None, f"{regex} 未匹配 {text}"
     assert expected in match.groups()
+
+
+# ---------------------------------------------------------------------------
+# 更新检查的版本号解析
+# ---------------------------------------------------------------------------
+def test_version_key_comparison(plugin):
+    """版本号比较必须按数值分段，而不是字符串比较。"""
+    module = plugin.module
+    key = module._version_key
+    assert key("4.3.13") > key("4.3.9")
+    assert key("4.10.0") > key("4.9.9")
+    assert key("4.3.13") == key("4.3.13")
+
+
+def test_version_check_url_points_to_file_with_version_literal(plugin):
+    """版本检查地址必须指向真正包含 PLUGIN_VERSION 字面量的文件。
+
+    这是集成测试中真实暴露过的缺陷：默认地址曾指向 ``__init__.py``，
+    而版本号字面量实际定义在 ``config.py``，导致更新检查永远解析失败。
+    """
+    from nonebot_plugin_genshin_role_info.config import PLUGIN_VERSION, config
+
+    assert config.genshin_role_info_version_url.endswith("config.py")
+    # 本地文件确实包含该字面量（远端为同一文件）
+    from pathlib import Path
+
+    from nonebot_plugin_genshin_role_info import paths
+
+    config_source = (Path(paths.BASE_PATH) / "config.py").read_text(encoding="utf-8")
+    assert f'PLUGIN_VERSION = "{PLUGIN_VERSION}"' in config_source
+
+
+def test_version_regex_matches_both_source_forms(plugin):
+    """版本号正则必须同时兼容两种写法。"""
+    import re
+
+    patterns = [
+        re.compile(r'version="(\d+\.\d+\.\d+)"'),
+        re.compile(r'PLUGIN_VERSION\s*=\s*"(\d+\.\d+\.\d+)"'),
+    ]
+    samples = {
+        r'version="4.3.13"': "4.3.13",
+        r'PLUGIN_VERSION = "4.3.13"': "4.3.13",
+    }
+    for text, expected in samples.items():
+        matched = next(
+            (m.group(1) for p in patterns if (m := p.search(text))), None
+        )
+        assert matched == expected, f"{text!r} 未被解析"
+
+
+def test_remote_version_source_matches_local(plugin):
+    """本地 config.py 的版本号与 PluginMetadata 必须一致。"""
+    from nonebot_plugin_genshin_role_info.config import PLUGIN_VERSION
+
+    assert plugin.metadata.extra["version"] == PLUGIN_VERSION
+    assert plugin.module.__plugin_version__ == PLUGIN_VERSION

@@ -58,9 +58,12 @@ class Config(BaseModel):
     genshin_role_info_version_url: str = Field(
         default=(
             "https://raw.githubusercontent.com/NovaEvset/"
-            "Genshin-RoleInfo-Plugin/main/nonebot_plugin_genshin_role_info/__init__.py"
+            "Genshin-RoleInfo-Plugin/main/nonebot_plugin_genshin_role_info/config.py"
         ),
-        description="远端版本号检查地址。",
+        description=(
+            "远端版本号检查地址。必须指向包含 PLUGIN_VERSION 字面量的文件"
+            "（本项目的版本号定义在 config.py）。"
+        ),
     )
     genshin_role_info_changelog_url: str = Field(
         default=(
